@@ -1,0 +1,44 @@
+void NoRecoil(void* instance, Vector3* recoilVec, float a1, float a2) {
+    if (!Vars.SilentAim && !Vars.Enable) return;
+
+    recoilVec->x = 0;
+    recoilVec->y = 0;
+    recoilVec->z = 0;
+}
+void AutoHookSilentFire() {
+    static bool isHooked = false;
+   
+    void* fireOffset = (void*)getRealOffset(ENCRYPTOFFSET("0x498E050"));
+    void* noRecoilAddr = (void*)getRealOffset(ENCRYPTOFFSET("0x4EF3320"));
+
+    if (!Vars.SilentAim) return;
+
+    void* match = game_sdk->Curent_Match();
+    if (!match) return;
+
+    void* local = game_sdk->GetLocalPlayer(match);
+    if (!local  !game_sdk->Component_GetTransform(local)) return;
+
+    bool isFiring = game_sdk->get_IsFiring(local);
+
+    if (!isFiring && isHooked) {
+        Unhook(fireOffset);
+        Unhook(noRecoilAddr);
+        isHooked = false;
+        return;
+    }
+
+    if (isFiring) {
+        void* enemy = GetClosestEnemy();
+        if (!enemy  game_sdk->GetHp(enemy) <= 0) return;
+
+        if (!isHooked) {
+          
+            void* addr[] = { fireOffset, noRecoilAddr };
+            void* func[] = { (void*)bitch, (void*)NoRecoil };
+
+            hook(addr, func, 2); 
+            isHooked = true;
+        }
+    }
+}

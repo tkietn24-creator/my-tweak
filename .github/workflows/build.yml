@@ -1,0 +1,48 @@
+name: Build iOS Tweak (Theos)
+
+on:
+  push:
+    branches: [ main, master ]
+  pull_request:
+    branches: [ main, master ]
+  workflow_dispatch:
+
+jobs:
+  build:
+    name: Build Tweak (arm64)
+    runs-on: macos-14
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          submodules: recursive
+
+      - name: Setup Theos
+        run: |
+          echo "Cloning Theos..."
+          git clone --recursive https://github.com/theos/theos.git ~/theos
+          echo "THEOS=$HOME/theos" >> $GITHUB_ENV
+          
+          echo "Cloning iOS SDKs..."
+          git clone --depth=1 https://github.com/theos/sdks.git ~/theos/sdks
+
+      - name: Build Tweak Package
+        run: |
+          make clean
+          make package FINALPACKAGE=1
+
+      - name: Copy Dylib
+        run: |
+          mkdir -p output
+          cp packages/*.deb output/ 2>/dev/null || true
+          find .theos/obj -name "*.dylib" -exec cp {} output/ \; 2>/dev/null || true
+          echo "Generated output files:"
+          ls -lh output/
+
+      - name: Upload Artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: ReimanPrime-Tweak-Build
+          path: output/*
+          if-no-files-found: error

@@ -1,1 +1,9 @@
+.theos/
+packages/
+venv/
+*.rar
 .DS_Store
+.vscode/
+output/
+Hikari/
+*Zone.Identifier*

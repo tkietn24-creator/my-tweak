@@ -115,7 +115,7 @@ bool ImGui_ImplMetal_CreateFontsTexture(id<MTLDevice> device)
     [g_sharedMetalContext makeFontTextureWithDevice:device];
 
     ImGuiIO& io = ImGui::GetIO();
-    io.Fonts->SetTexID((__bridge void *)g_sharedMetalContext.fontTexture); // ImTextureID == void*
+    io.Fonts->SetTexID((ImTextureID)((uintptr_t)g_sharedMetalContext.fontTexture));
 
     return (g_sharedMetalContext.fontTexture != nil);
 }
@@ -124,7 +124,7 @@ void ImGui_ImplMetal_DestroyFontsTexture()
 {
     ImGuiIO& io = ImGui::GetIO();
     g_sharedMetalContext.fontTexture = nil;
-    io.Fonts->SetTexID(nullptr);
+    io.Fonts->SetTexID((ImTextureID)0);
 }
 
 bool ImGui_ImplMetal_CreateDeviceObjects(id<MTLDevice> device)
@@ -522,8 +522,8 @@ void ImGui_ImplMetal_DestroyDeviceObjects()
 
 
                     // Bind texture, Draw
-                    if (pcmd->TextureId != NULL)
-                        [commandEncoder setFragmentTexture:(__bridge id<MTLTexture>)(pcmd->TextureId) atIndex:0];
+                    if (pcmd->TextureId != (ImTextureID)0)
+                        [commandEncoder setFragmentTexture:(__bridge id<MTLTexture>)((void*)pcmd->TextureId) atIndex:0];
 
                     [commandEncoder setVertexBufferOffset:(vertexBufferOffset + pcmd->VtxOffset * sizeof(ImDrawVert)) atIndex:0];
                     [commandEncoder drawIndexedPrimitives:MTLPrimitiveTypeTriangle

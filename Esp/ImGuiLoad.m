@@ -1,16 +1,8 @@
-//
-//  ImGuiLoad.m
-//  ImGuiTest
-//
-//  Created by yiming on 2021/6/2.
-//
-
 #import "ImGuiLoad.h"
 #import "ImGuiDrawView.h"
 @interface ImGuiLoad()
 @property (nonatomic, strong) ImGuiDrawView *vna;
 @end
-UIWindow *mainWindow;
 @implementation ImGuiLoad
 
 + (instancetype)share
