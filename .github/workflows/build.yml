@@ -10,7 +10,7 @@ on:
 jobs:
   build:
     name: Build Tweak (arm64)
-    runs-on: macos-14
+    runs-on: macos-13
 
     steps:
       - name: Checkout code
@@ -19,8 +19,8 @@ jobs:
       - name: Setup Theos & SDKs
         run: |
           set -e
-          echo "Cloning Theos..."
-          git clone --recursive https://github.com/theos/theos.git ~/theos
+          echo "Cloning Theos (fast depth 1)..."
+          git clone --depth=1 --recursive https://github.com/theos/theos.git ~/theos
           echo "THEOS=$HOME/theos" >> $GITHUB_ENV
           
           echo "Preparing SDKs..."
