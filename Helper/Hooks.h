@@ -1520,7 +1520,6 @@ void get_players()
 
     int totalRealCount = 0;
     int totalBotCount = 0;
-    int enemyDisplayIndex = 1;
     double nowFrame = NowSeconds();
 
     try
@@ -1613,7 +1612,7 @@ void get_players()
             bool w2sc;
             Vector3 headPos = pos + Vector3(0, 1.45f, 0);
             ImVec2 pos_3 = Camera$$WorldToScreen::Checker(pos, w2sc);
-            if (!w2sc && !Vars.OOF) { enemyDisplayIndex++; continue; }
+            if (!w2sc && !Vars.OOF) { continue; }
 
             bool needRect = w2sc && (Vars.Box || Vars.lines || Vars.Name || Vars.Health || Vars.Distance);
             ImVec2 top_pos = ImVec2(0,0), bot_pos = ImVec2(0,0);
@@ -1702,7 +1701,6 @@ void get_players()
                     draw_list->AddTriangle(p1, p2, p3, renderColor, 2.0f);
                 }
             }
-            enemyDisplayIndex++;
         }
         if (Vars.ESPCount || Vars.enemycount) {
             char infoText[64];

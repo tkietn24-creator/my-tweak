@@ -9,7 +9,7 @@ include $(THEOS)/makefiles/common.mk
 
 TWEAK_NAME = Tanhdzcute
 
-COMMON_FLAGS = -Wall -Wno-deprecated-declarations -Wno-unused-variable -Wno-unused-function -Wno-unused-value \
+COMMON_FLAGS = -Wno-error -Wno-unused-but-set-variable -Wno-deprecated-declarations -Wno-unused-variable -Wno-unused-function -Wno-unused-value \
                -I./ -I./il2cpp \
                -Os -flto -fvisibility=hidden -fvisibility-inlines-hidden \
                -fmerge-all-constants -ffunction-sections -fdata-sections \
