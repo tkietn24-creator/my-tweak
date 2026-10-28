@@ -7,10 +7,14 @@ on:
     branches: [ main, master ]
   workflow_dispatch:
 
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
 jobs:
   build:
     name: Build Tweak (arm64)
-    runs-on: macos-13
+    runs-on: macos-14
 
     steps:
       - name: Checkout code
@@ -19,7 +23,7 @@ jobs:
       - name: Setup Theos & SDKs
         run: |
           set -e
-          echo "Cloning Theos (fast depth 1)..."
+          echo "Cloning Theos..."
           git clone --depth=1 --recursive https://github.com/theos/theos.git ~/theos
           echo "THEOS=$HOME/theos" >> $GITHUB_ENV
           
